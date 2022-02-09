@@ -1,6 +1,10 @@
-import React from 'react'
+import React, { useMemo } from 'react'
 import { GetStaticPaths, GetStaticProps } from 'next'
 import { Article } from '../..'
+import { generateHTML, useEditor } from '@tiptap/react'
+import { editorExtensions as extensions } from '../../libs/editor-extensions'
+import Tiptap from '../../components/Tiptap'
+import { editorInstance } from '../../libs/editor-instance'
 
 export const getStaticPaths: GetStaticPaths = async () => {
 	const request = await fetch('http://localhost:3000/v1/article', {
@@ -44,7 +48,26 @@ type ViewProps = {
 }
 
 const View = ({ article }: ViewProps) => {
-	return <div>{JSON.stringify(article)}</div>
+	const content = useMemo(() => {
+		if (typeof window !== 'undefined') {
+			return generateHTML(article.doc!, extensions)
+		}
+	}, [article])
+
+	const editor = useEditor(
+		{
+			editable: false,
+			content,
+			...editorInstance
+		},
+		[content]
+	)
+
+	return (
+		<div>
+			<Tiptap editor={editor} />
+		</div>
+	)
 }
 
 export default View
