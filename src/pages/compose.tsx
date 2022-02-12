@@ -5,6 +5,7 @@ import { useEditor } from '@tiptap/react'
 
 import { editorInstance } from '../libs/editor-instance'
 import Tiptap from '../components/Tiptap'
+import { __API_ENDPOINT } from '../constants'
 
 const Compose = () => {
 	const router = useRouter()
@@ -13,7 +14,7 @@ const Compose = () => {
 	})
 
 	const publish = async () => {
-		const request = await fetch('http://localhost:3000/v1/article/publish', {
+		const request = await fetch(`${__API_ENDPOINT}/v1/doc/publish`, {
 			method: 'POST',
 			headers: {
 				'Content-Type': 'application/json'

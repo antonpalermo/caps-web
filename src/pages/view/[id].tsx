@@ -5,9 +5,10 @@ import { generateHTML, useEditor } from '@tiptap/react'
 import { editorExtensions as extensions } from '../../libs/editor-extensions'
 import Tiptap from '../../components/Tiptap'
 import { editorInstance } from '../../libs/editor-instance'
+import { __API_ENDPOINT } from '../../constants'
 
 export const getStaticPaths: GetStaticPaths = async () => {
-	const request = await fetch('http://localhost:3000/v1/article', {
+	const request = await fetch(`${__API_ENDPOINT}/v1/doc`, {
 		method: 'GET'
 	})
 
@@ -30,7 +31,7 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
 		id = params.id
 	}
 
-	const request = await fetch(`http://localhost:3000/v1/article/get?id=${id}`, {
+	const request = await fetch(`${__API_ENDPOINT}/v1/doc/get?id=${id}`, {
 		method: 'GET'
 	})
 

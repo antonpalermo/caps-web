@@ -4,13 +4,14 @@ import React, { useEffect, useState } from 'react'
 
 import { Article } from '..'
 import Articles from '../components/Articles'
+import { __API_ENDPOINT } from '../constants'
 
 type HomeProps = {
 	articles: Article[]
 }
 
 export const getServerSideProps: GetServerSideProps = async () => {
-	const request = await fetch('http://localhost:3000/v1/article', {
+	const request = await fetch(`${__API_ENDPOINT}/v1/doc`, {
 		method: 'GET'
 	})
 	const articles = await request.json()
