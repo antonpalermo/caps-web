@@ -1,9 +1,44 @@
-import React from 'react'
+import { GetServerSideProps } from 'next'
+import { useRouter } from 'next/router'
+import React, { useEffect, useState } from 'react'
 
-const Home = () => {
+import { Article } from '..'
+import Articles from '../components/Articles'
+import { __API_ENDPOINT } from '../constants'
+
+type HomeProps = {
+	articles: Article[]
+}
+
+export const getServerSideProps: GetServerSideProps = async () => {
+	const request = await fetch(`${__API_ENDPOINT}/v1/doc`, {
+		method: 'GET'
+	})
+	const articles = await request.json()
+
+	return {
+		props: {
+			articles
+		}
+	}
+}
+
+const Home = ({ articles }: HomeProps) => {
+	const router = useRouter()
+
+	const compose = () => {
+		router.push({
+			pathname: '/compose',
+			// TODO: change this to some user id when authenticated.
+			query: { id: 'some-user-id' }
+		})
+	}
+
 	return (
 		<div>
 			<h1>Sample App</h1>
+			<button onClick={compose}>Compose</button>
+			<Articles articles={articles} />
 		</div>
 	)
 }
