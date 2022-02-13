@@ -14,7 +14,7 @@ const Compose = () => {
 	})
 
 	const publish = async () => {
-		const request = await fetch(`${__API_ENDPOINT}/v1/doc/publish`, {
+		const request = await fetch('/api/doc/create', {
 			method: 'POST',
 			headers: {
 				'Content-Type': 'application/json'
