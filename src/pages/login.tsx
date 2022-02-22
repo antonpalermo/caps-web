@@ -2,9 +2,11 @@ import React from 'react'
 import { Form, Formik } from 'formik'
 import { useSession } from '../providers/session'
 import { __API_ENDPOINT, __PUBLIC_API_ENDPOINT } from '../constants'
+import { useRouter } from 'next/router'
 
 const SignIn = () => {
 	const { setAccessToken } = useSession()
+	const router = useRouter()
 
 	return (
 		<>
@@ -25,7 +27,10 @@ const SignIn = () => {
 					)
 
 					const data = await request.json()
-					setAccessToken(data.accessToken)
+					if (data) {
+						setAccessToken(data.accessToken)
+						router.push('/')
+					}
 				}}
 			>
 				{({ handleSubmit, handleChange, handleBlur, values, isSubmitting }) => (
