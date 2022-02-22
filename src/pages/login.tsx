@@ -1,7 +1,7 @@
 import React from 'react'
 import { Form, Formik } from 'formik'
 import { useSession } from '../providers/session'
-import { __API_ENDPOINT } from '../constants'
+import { __API_ENDPOINT, __PUBLIC_API_ENDPOINT } from '../constants'
 
 const SignIn = () => {
 	const { setAccessToken } = useSession()
@@ -12,13 +12,17 @@ const SignIn = () => {
 			<Formik
 				initialValues={{ identity: '', password: '' }}
 				onSubmit={async value => {
-					const request = await fetch(`/api/auth/login`, {
-						method: 'POST',
-						headers: {
-							'Content-Type': 'application/json'
-						},
-						body: JSON.stringify(value)
-					})
+					const request = await fetch(
+						`${__PUBLIC_API_ENDPOINT}/v1/auth/authenticate`,
+						{
+							method: 'POST',
+							headers: {
+								'Content-Type': 'application/json'
+							},
+							credentials: 'include',
+							body: JSON.stringify(value)
+						}
+					)
 
 					const data = await request.json()
 					setAccessToken(data.accessToken)
