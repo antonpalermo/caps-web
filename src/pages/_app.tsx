@@ -1,12 +1,12 @@
 import React from 'react'
 import { AppProps } from 'next/app'
+import { SessionProvider } from 'next-auth/react'
 
 import '../styles/main.css'
-import { SessionProvider } from '../providers/session'
 
-const App = ({ Component, pageProps }: AppProps) => (
-	<SessionProvider>
-		<Component {...pageProps} />
+const App = ({ Component, pageProps: { session, ...rest } }: AppProps) => (
+	<SessionProvider session={session}>
+		<Component {...rest} />
 	</SessionProvider>
 )
 

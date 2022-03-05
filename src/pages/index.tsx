@@ -1,4 +1,5 @@
 import { GetServerSideProps } from 'next'
+import { signIn, signOut, useSession } from 'next-auth/react'
 import { useRouter } from 'next/router'
 import React, { useEffect, useState } from 'react'
 
@@ -25,6 +26,12 @@ export const getServerSideProps: GetServerSideProps = async () => {
 
 const Home = ({ articles }: HomeProps) => {
 	const router = useRouter()
+	const { data: session } = useSession({
+		required: true,
+		onUnauthenticated: () => {
+			signIn('google')
+		}
+	})
 
 	const compose = () => {
 		router.push({
@@ -36,9 +43,19 @@ const Home = ({ articles }: HomeProps) => {
 
 	return (
 		<div>
-			<h1>Sample App</h1>
-			<button onClick={compose}>Compose</button>
-			<Articles articles={articles} />
+			{session ? (
+				<>
+					<button onClick={() => signOut()}>Sign Out</button>
+					<h1>Sample App</h1>
+					<button onClick={compose}>Compose</button>
+					<Articles articles={articles} />
+				</>
+			) : (
+				<>
+					<h1>Unauthenticated User</h1>
+					<button onClick={() => signIn()}>Sign In</button>
+				</>
+			)}
 		</div>
 	)
 }
